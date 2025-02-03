@@ -24,7 +24,7 @@ const CostChart = ({ data, selectedDate }) => {
     }, [data]);
 
     // Generate colors for different categories
-    const COLORS = [
+    const colors = [
         theme.palette.primary.main,
         theme.palette.secondary.main,
         '#00C49F',
@@ -65,7 +65,7 @@ const CostChart = ({ data, selectedDate }) => {
                             data={chartData}
                             cx="50%"
                             cy="50%"
-                            labelLine={true}
+                            labelLine={false}
                             label={({
                                         cx,
                                         cy,
@@ -99,14 +99,21 @@ const CostChart = ({ data, selectedDate }) => {
                             {chartData.map((entry, index) => (
                                 <Cell
                                     key={`cell-${index}`}
-                                    fill={COLORS[index % COLORS.length]}
+                                    fill={colors[index % colors.length]}
                                 />
                             ))}
                         </Pie>
                         <Tooltip
                             formatter={(value) => `$${value.toFixed(2)}`}
                         />
-                        <Legend />
+                        <Legend
+                            verticalAlign="middle"
+                            align="right"
+                            layout="vertical"
+                            wrapperStyle={{
+                                paddingLeft: "20px"
+                            }}
+                        />
                     </PieChart>
                 </ResponsiveContainer>
             ) : (
