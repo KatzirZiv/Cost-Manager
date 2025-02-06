@@ -38,15 +38,16 @@ function stableSort(array, orderBy, order) {
         return multiplier * (aVal < bVal ? -1 : aVal > bVal ? 1 : 0);
     });
 }
-
 /**
- * CostReport component displays detailed monthly cost report
- * @param {Object} props - Component props
- * @param {Array} props.costs - Array of cost items
- * @param {Date} props.selectedDate - Selected month and year
- * @param {Function} props.onDateChange - Date change handler
- * @param {Function} props.onDeleteCost - Cost deletion handler
- */
+* Displays detailed cost report with filtering and sorting
+* @component
+* @param {Object} props - Component properties
+* @param {Array<Object>} props.costs - Array of cost items
+* @param {Date} props.selectedDate - Selected month/year
+* @param {Function} props.onDateChange - Date change handler
+* @param {Function} props.onDeleteCost - Cost deletion handler
+* @param {boolean} props.loading - Loading state indicator
+*/
 const CostReport = ({
                         costs,
                         selectedDate,
