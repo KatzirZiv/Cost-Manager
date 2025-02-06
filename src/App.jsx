@@ -92,6 +92,7 @@ function App() {
 
     const handleAddCost = async (costData) => {
         try {
+            if (!db) throw new Error('Database not initialized');
             await db.addCost(costData);
 
             // Refresh current month's data
@@ -106,6 +107,7 @@ function App() {
             setCategoryTotals(totals);
             showNotification('Cost added successfully');
         } catch (err) {
+            setError(`Failed to add cost: ${err.message}`);
             showNotification('Failed to add cost', 'error');
             console.error('Error adding cost:', err);
         }
