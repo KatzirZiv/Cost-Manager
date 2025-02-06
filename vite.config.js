@@ -11,4 +11,9 @@ export default defineConfig({
   optimizeDeps: {
     include: ['@mui/material/Tooltip']
   }
+  base: '/',
+  build: {
+    outDir: 'dist'
+  }
+}
 })
