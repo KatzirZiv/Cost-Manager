@@ -1,7 +1,3 @@
-/**
- Ziv Katzir
- */
-
 import React, { useState, useMemo } from 'react';
 import { format } from 'date-fns';
 
@@ -24,7 +20,6 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import DeleteIcon from '@mui/icons-material/Delete';
-
 /**
  * Helper function to sort cost data
  * @param {Array} array - Array to sort
@@ -41,15 +36,18 @@ function stableSort(array, orderBy, order) {
     });
 }
 /**
-* Displays detailed cost report with filtering and sorting
-* @component
-* @param {Object} props - Component properties
-* @param {Array<Object>} props.costs - Array of cost items
-* @param {Date} props.selectedDate - Selected month/year
-* @param {Function} props.onDateChange - Date change handler
-* @param {Function} props.onDeleteCost - Cost deletion handler
-* @param {boolean} props.loading - Loading state indicator
-*/
+ * Detailed tabular report component showing itemized expenses.
+ * Supports sorting, filtering, pagination and individual cost deletion.
+ *
+ * @component
+ * @param {Object} props - Component props
+ * @param {Array<Object>} props.costs - Array of cost items to display
+ * @param {Date} props.selectedDate - Selected month/year for filtering
+ * @param {Function} props.onDateChange - Handler for date selection changes
+ * @param {Function} props.onDeleteCost - Handler for cost deletion requests
+ * @param {boolean} [props.loading] - Whether report data is loading
+ * @returns {JSX.Element} Rendered report component
+ */
 const CostReport = ({
                         costs,
                         selectedDate,
@@ -80,7 +78,7 @@ const CostReport = ({
         return filteredAndSortedCosts.reduce((sum, cost) => sum + cost.amount, 0);
     }, [filteredAndSortedCosts]);
 
-    // Handle sort request
+    // Handle sort column changes
     const handleRequestSort = (property) => {
         const isAsc = orderBy === property && order === 'asc';
         setOrder(isAsc ? 'desc' : 'asc');
@@ -99,12 +97,15 @@ const CostReport = ({
     };
 
     return (
+        // Main container for the report
         <Box>
+            {/* Report title */}
             <Typography variant="h6" component="h2" gutterBottom>
                 Monthly Report
             </Typography>
-
+            {/* Controls section: date picker and search */}
             <Box sx={{ mb: 3, display: 'flex', gap: 2, alignItems: 'center' }}>
+                {/* Date picker for month/year selection */}
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
                     <DatePicker
                         views={['year', 'month']}
@@ -114,7 +115,7 @@ const CostReport = ({
                         renderInput={(params) => <TextField {...params} helperText={null} />}
                     />
                 </LocalizationProvider>
-
+                {/* Search field for filtering costs */}
                 <TextField
                     label="Search"
                     variant="outlined"
@@ -124,9 +125,10 @@ const CostReport = ({
                     sx={{ ml: 'auto' }}
                 />
             </Box>
-
+            {/* Main costs table */}
             <TableContainer component={Paper}>
                 <Table sx={{ minWidth: 650 }} aria-label="cost report table">
+                    {/* Table header with sortable columns */}
                     <TableHead>
                         <TableRow>
                             <TableCell>
@@ -160,6 +162,7 @@ const CostReport = ({
                             <TableCell align="center">Actions</TableCell>
                         </TableRow>
                     </TableHead>
+                    {/* Table body with cost entries and total row */}
                     <TableBody>
                         {filteredAndSortedCosts
                             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
@@ -200,7 +203,7 @@ const CostReport = ({
                     </TableBody>
                 </Table>
             </TableContainer>
-
+            {/* Pagination controls */}
             <TablePagination
                 rowsPerPageOptions={[5, 10, 25]}
                 component="div"

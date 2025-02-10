@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { TextField, Button, Stack, MenuItem } from '@mui/material';
-
 /**
  * List of predefined cost categories.
  * @constant {string[]}
@@ -15,13 +14,16 @@ const categories = [
 ];
 
 /**
- * Component for adding a new cost entry.
+ * Component for adding a new cost entry to the expense tracker.
+ * Provides form fields for amount, category, description, and date.
  *
  * @component
- * @param {Object} props - Component props.
- * @param {Function} props.onSubmit - Callback function that handles form submission.
- * @returns {JSX.Element} The rendered form component.
+ * @param {Object} props - Component props
+ * @param {Function} props.onSubmit - Callback function invoked when form is submitted
+ * @param {boolean} [props.disabled] - Whether the form is disabled
+ * @returns {JSX.Element} Rendered form component
  */
+
 export default function AddCostForm({ onSubmit }) {
     /**
      * @typedef {Object} CostFormData
@@ -59,8 +61,10 @@ export default function AddCostForm({ onSubmit }) {
     };
 
     return (
+        // Render form with stacked input fields for cost entry
         <form onSubmit={handleSubmit}>
             <Stack spacing={2}>
+                {/* Amount input field */}
                 <TextField
                     label="Amount"
                     type="number"
@@ -68,6 +72,7 @@ export default function AddCostForm({ onSubmit }) {
                     onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
                     required
                 />
+                {/* Category selection dropdown */}
                 <TextField
                     select
                     label="Category"
@@ -75,24 +80,28 @@ export default function AddCostForm({ onSubmit }) {
                     onChange={(e) => setFormData({ ...formData, category: e.target.value })}
                     required
                 >
+                    {/* Map through the predefined categories */}
                     {categories.map(category => (
                         <MenuItem key={category} value={category}>
                             {category}
                         </MenuItem>
                     ))}
                 </TextField>
+                {/* Description input field */}
                 <TextField
                     label="Description"
                     value={formData.description}
                     onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                     required
                 />
+                {/* Date picker */}
                 <TextField
                     type="date"
                     value={formData.date}
                     onChange={(e) => setFormData({ ...formData, date: e.target.value })}
                     required
                 />
+                {/* Submit button */}
                 <Button type="submit" variant="contained">
                     Add Cost
                 </Button>

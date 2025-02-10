@@ -1,22 +1,22 @@
-/**
- Ziv Katzir
- */
-
 export class CostManagerDB {
     /**
-     * Creates an instance of CostManagerDB
-     * @param {string} dbName - The name of the database
-     * @param {number} version - The version of the database
+     * Creates a new database manager instance.
+     *
+     * @param {string} [dbName='CostManagerDB'] - Name of the IndexedDB database
+     * @param {number} [version=1] - Schema version number
      */
     constructor(dbName = 'CostManagerDB', version = 1) {
         this.dbName = dbName;
         this.version = version;
         this.db = null;
     }
-
     /**
-     * Initializes the database and creates object stores
-     * @returns {Promise} - Resolves when database is initialized
+     * Initializes the database connection and creates required object stores.
+     * Creates 'costs' store with indexes if it doesn't exist.
+     *
+     * @async
+     * @returns {Promise<IDBDatabase>} Initialized database instance
+     * @throws {Error} If database initialization fails
      */
     async init() {
         return new Promise((resolve, reject) => {
@@ -49,11 +49,17 @@ export class CostManagerDB {
             };
         });
     }
-
     /**
-     * Adds a new cost item to the database
-     * @param {Object} cost - The cost item to add
-     * @returns {Promise} - Resolves with the id of the added cost
+     * Adds a new cost entry to the database.
+     *
+     * @async
+     * @param {Object} cost - Cost entry to add
+     * @param {number} cost.amount - Cost amount
+     * @param {string} cost.category - Cost category
+     * @param {string} cost.description - Cost description
+     * @param {string} cost.date - Cost date in ISO format
+     * @returns {Promise<number>} ID of the newly added cost entry
+     * @throws {Error} If database is not initialized or operation fails
      */
     async addCost(cost) {
         if (!this.db) {
@@ -78,12 +84,14 @@ export class CostManagerDB {
             request.onerror = () => reject(new Error('Failed to add cost'));
         });
     }
-
     /**
-     * Gets all costs for a specific month and year
-     * @param {number} year - The year to query
-     * @param {number} month - The month to query (1-12)
-     * @returns {Promise} - Resolves with an array of cost items
+     * Retrieves all costs for a specific month.
+     *
+     * @async
+     * @param {number} year - Year to query
+     * @param {number} month - Month to query (1-12)
+     * @returns {Promise<Array<Object>>} Array of cost entries
+     * @throws {Error} If database is not initialized or operation fails
      */
     async getCostsByMonth(year, month) {
         if (!this.db) {
@@ -101,12 +109,13 @@ export class CostManagerDB {
             request.onerror = () => reject(new Error('Failed to get costs'));
         });
     }
-
     /**
      * Gets costs grouped by category for a specific month and year
-     * @param {number} year - The year to query
-     * @param {number} month - The month to query (1-12)
-     * @returns {Promise} - Resolves with an object containing category totals
+     * @async
+     * @param {number} year - Year to query
+     * @param {number} month - Month to query (1-12)
+     * @returns {Promise<Object>} Object with category names as keys and total amounts as values
+     * @throws {Error} If database is not initialized or operation fails
      */
     async getCostsByCategory(year, month) {
         const costs = await this.getCostsByMonth(year, month);

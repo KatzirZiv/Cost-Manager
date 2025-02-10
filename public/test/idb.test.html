@@ -1,21 +1,59 @@
 <!DOCTYPE html>
+
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Cost Manager</title>
-    <link
-            rel="stylesheet"
-            href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
-    />
-    <link
-            rel="stylesheet"
-            href="https://fonts.googleapis.com/icon?family=Material+Icons"
-    />
+
+    <meta charset="UTF-8">
+
+    <title>Title</title>
+
 </head>
+
 <body>
-<div id="root"></div>
-<script type="module" src="/src/main.jsx"></script>
+
+<script src="\src\lib\idb.js"></script>
+
+<script>
+
+    async function test() {
+
+        const db = await idb.openCostsDB("costsdb",1);
+
+        const result1 =
+            await db.addCost({sum:200,category:"FOOD",
+                description:"pizza"});
+
+        const result2 =
+            await db.addCost({sum:400,category:"CAR",
+                description:"fuel"});
+
+        if(db) {
+
+            console.log("creating db succeeded");
+
+        }
+
+        if(result1) {
+
+            console.log("adding 1st cost item succeeded");
+
+        }
+
+        if(result2) {
+
+            console.log("adding 2nd cost item succeeded");
+
+        }
+
+    }
+
+    test()
+
+    //...
+
+</script>
+
 </body>
+
 </html>

@@ -1,16 +1,16 @@
-/*
-Ziv Katzir
- */
-
 import React, { useMemo } from 'react';
 import { Box, Typography, useTheme } from '@mui/material';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recharts';
-
 /**
- * CostChart component displays cost distribution by category
+ * Pie chart component that visualizes cost distribution by category.
+ * Displays percentage breakdowns and total expenses for the selected period.
+ *
+ * @component
  * @param {Object} props - Component props
- * @param {Object} props.data - Category totals data
- * @param {Date} props.selectedDate - Selected month and year
+ * @param {Object} props.data - Category totals data object with category names as keys and amounts as values
+ * @param {Date} props.selectedDate - Currently selected month/year for filtering
+ * @param {boolean} [props.loading] - Whether chart data is loading
+ * @returns {JSX.Element} Rendered chart component
  */
 const CostChart = ({ data, selectedDate }) => {
     const theme = useTheme();
@@ -30,12 +30,12 @@ const CostChart = ({ data, selectedDate }) => {
         '#00C49F',
         '#FFBB28',
         '#FF8042',
-        '#a855f7',
+        '#fa0303',
         '#ec4899',
         '#06b6d4'
     ];
 
-    // Calculate total amount
+    // Calculate total expenses for the period
     const totalAmount = useMemo(() => {
         return chartData.reduce((sum, item) => sum + item.value, 0);
     }, [chartData]);
@@ -49,18 +49,22 @@ const CostChart = ({ data, selectedDate }) => {
     }, [selectedDate]);
 
     return (
+        // Main container for the chart
         <Box sx={{ width: '100%', height: 400 }}>
+            {/* Chart title with current month/year */}
             <Typography variant="h6" component="h2" gutterBottom>
                 Expenses Distribution - {monthYear}
             </Typography>
-
+            {/* Total expenses display */}
             <Typography variant="subtitle1" gutterBottom>
                 Total: ${totalAmount.toFixed(2)}
             </Typography>
-
+            {/* Render pie chart if data exists, otherwise show empty state */}
             {chartData.length > 0 ? (
+                // Responsive container for the pie chart
                 <ResponsiveContainer width="100%" height="100%">
                     <PieChart>
+                        {/* Main pie chart with labels and hover effects */}
                         <Pie
                             data={chartData}
                             cx="50%"
@@ -96,6 +100,7 @@ const CostChart = ({ data, selectedDate }) => {
                             fill="#8884d8"
                             dataKey="value"
                         >
+                            {/* Color cells for each category */}
                             {chartData.map((entry, index) => (
                                 <Cell
                                     key={`cell-${index}`}
@@ -103,9 +108,11 @@ const CostChart = ({ data, selectedDate }) => {
                                 />
                             ))}
                         </Pie>
+                        {/* Tooltip for detailed values on hover */}
                         <Tooltip
                             formatter={(value) => `$${value.toFixed(2)}`}
                         />
+                        {/* Legend showing categories */}
                         <Legend
                             verticalAlign="middle"
                             align="right"
@@ -117,6 +124,7 @@ const CostChart = ({ data, selectedDate }) => {
                     </PieChart>
                 </ResponsiveContainer>
             ) : (
+                // Empty state message when no data is available
                 <Box
                     sx={{
                         height: '100%',

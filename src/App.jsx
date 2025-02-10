@@ -1,6 +1,3 @@
-/*
-Ziv Katzir
- */
 import { useState, useEffect } from 'react';
 import {
     Box,
@@ -20,7 +17,6 @@ import AddCostForm from './components/AddCostForm';
 import CostReport from './components/CostReport';
 import CostChart from './components/CostChart';
 import { CostManagerDB } from './lib/idb.jsx';
-
 /**
  * Main application component for managing cost entries.
  *
@@ -29,18 +25,17 @@ import { CostManagerDB } from './lib/idb.jsx';
  */
 function App() {
     // State management
-    const [db, setDb] = useState(null);
-    const [selectedDate, setSelectedDate] = useState(new Date());
-    const [costs, setCosts] = useState([]);
-    const [categoryTotals, setCategoryTotals] = useState({});
-    const [notification, setNotification] = useState({
+    const [db, setDb] = useState(null);                    // Database instance
+    const [selectedDate, setSelectedDate] = useState(new Date());  // Current selected date for filtering
+    const [costs, setCosts] = useState([]);                // Array of cost entries
+    const [categoryTotals, setCategoryTotals] = useState({}); // Totals grouped by category
+    const [notification, setNotification] = useState({      // Notification state for feedback
         open: false,
         message: '',
         severity: 'success'
     });
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-
+    const [loading, setLoading] = useState(true);          // Global loading state
+    const [error, setError] = useState(null);              // Global error state
     // Initialize database
     useEffect(() => {
         const initDb = async () => {
@@ -55,14 +50,12 @@ function App() {
                 setLoading(false);
             }
         };
-
         initDb();
     }, []);
 
-    // Load costs when selected date changes
+    // Load and update costs when selected date or database changes
     useEffect(() => {
         if (!db) return;
-
         const loadCosts = async () => {
             try {
                 setLoading(true);
@@ -74,7 +67,6 @@ function App() {
                     db.getCostsByMonth(year, month),
                     db.getCostsByCategory(year, month)
                 ]);
-
                 setCosts(monthCosts);
                 setCategoryTotals(totals);
             } catch (err) {
@@ -84,10 +76,9 @@ function App() {
                 setLoading(false);
             }
         };
-
         loadCosts();
     }, [db, selectedDate]);
-
+    // Handle snackbar notifications
     const showNotification = (message, severity = 'success') => {
         setNotification({
             open: true,
@@ -95,7 +86,7 @@ function App() {
             severity
         });
     };
-
+    // Handles adding new cost entry and updates the UI
     const handleAddCost = async (costData) => {
         try {
             if (!db) throw new Error('Database not initialized');
@@ -118,7 +109,7 @@ function App() {
             console.error('Error adding cost:', err);
         }
     };
-
+    // Handles cost deletion and updates the UI
     const handleDeleteCost = async (id) => {
         try {
             await db.deleteCost(id);
@@ -139,11 +130,10 @@ function App() {
             console.error('Error deleting cost:', err);
         }
     };
-
+    // Closes the notification snackbar
     const handleCloseNotification = () => {
         setNotification(prev => ({ ...prev, open: false }));
     };
-
     // Initial loading state
     if (loading && !db) {
         return (
@@ -159,7 +149,6 @@ function App() {
             </Box>
         );
     }
-
     // Error state
     if (error) {
         return (
@@ -172,9 +161,11 @@ function App() {
     }
 
     return (
+        // Date picker provider wrapper
         <LocalizationProvider dateAdapter={AdapterDateFns}>
+            {/* Main app container */}
             <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-                {/* App Bar */}
+                {/* Top navigation bar */}
                 <AppBar position="static" elevation={0}>
                     <Toolbar>
                         <Typography variant="h6" component="h1">
@@ -183,10 +174,10 @@ function App() {
                     </Toolbar>
                 </AppBar>
 
-                {/* Main Content */}
+                {/* Main content area */}
                 <Container maxWidth="lg" sx={{ mt: 4, mb: 4, flex: 1 }}>
                     <Grid container spacing={3}>
-                        {/* Add Cost Form */}
+                        {/* Form section for adding new costs */}
                         <Grid item xs={12} md={6}>
                             <Paper elevation={2} sx={{ p: 3, height: '100%' }}>
                                 <Typography variant="h6" component="h2" gutterBottom>
@@ -199,7 +190,7 @@ function App() {
                             </Paper>
                         </Grid>
 
-                        {/* Cost Chart */}
+                        {/* Cost distribution chart */}
                         <Grid item xs={12} md={6}>
                             <Paper elevation={2} sx={{ p: 3, height: '100%' }}>
                                 <CostChart
@@ -210,7 +201,7 @@ function App() {
                             </Paper>
                         </Grid>
 
-                        {/* Monthly Report */}
+                        {/* Detailed cost report table */}
                         <Grid item xs={12}>
                             <Paper elevation={2} sx={{ p: 3 }}>
                                 <CostReport
