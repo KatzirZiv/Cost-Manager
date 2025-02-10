@@ -21,6 +21,12 @@ import CostReport from './components/CostReport';
 import CostChart from './components/CostChart';
 import { CostManagerDB } from './lib/idb.jsx';
 
+/**
+ * Main application component for managing cost entries.
+ *
+ * @component
+ * @returns {JSX.Element} The rendered Cost Manager app.
+ */
 function App() {
     // State management
     const [db, setDb] = useState(null);
