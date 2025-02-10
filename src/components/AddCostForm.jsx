@@ -50,12 +50,12 @@ export default function AddCostForm({ onSubmit }) {
             ...formData,
             amount: Number(formData.amount) // Convert amount to a number before submitting
         });
-        setFormData({
+        setFormData(prevData =>({
+            ...prevData,
             amount: '',
             category: '',
             description: '',
-            date: new Date().toISOString().split('T')[0]
-        });
+        }));
     };
 
     return (
