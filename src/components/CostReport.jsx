@@ -3,6 +3,8 @@
  */
 
 import React, { useState, useMemo } from 'react';
+import { format } from 'date-fns';
+
 import {
     Box,
     Typography,
@@ -164,7 +166,7 @@ const CostReport = ({
                             .map((cost) => (
                                 <TableRow key={cost.id}>
                                     <TableCell>
-                                        {new Date(cost.date).toLocaleDateString()}
+                                        {format(new Date(cost.date), 'dd/MM/yyyy')}
                                     </TableCell>
                                     <TableCell>{cost.category}</TableCell>
                                     <TableCell>{cost.description}</TableCell>
