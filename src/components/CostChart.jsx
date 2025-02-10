@@ -7,7 +7,8 @@ import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recha
  *
  * @component
  * @param {Object} props - Component props
- * @param {Object} props.data - Category totals data object with category names as keys and amounts as values
+ * @param {Object} props.data - Category totals data object with category names as
+ * keys and amounts as values
  * @param {Date} props.selectedDate - Currently selected month/year for filtering
  * @param {boolean} [props.loading] - Whether chart data is loading
  * @returns {JSX.Element} Rendered chart component
