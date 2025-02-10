@@ -1,6 +1,8 @@
 /**
- Ziv Katzir
+ * @file Entry point of the React application.
+ * Initializes the root component and applies global providers such as Theme and Localization.
  */
+
 
 import React from 'react'
 import ReactDOM from 'react-dom/client'
