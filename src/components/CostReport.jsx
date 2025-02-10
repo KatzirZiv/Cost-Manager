@@ -107,8 +107,6 @@ const CostReport = ({
                     <DatePicker
                         views={['year', 'month']}
                         label="Year and Month"
-                        minDate={new Date('2020-01-01')}
-                        maxDate={new Date('2030-12-31')}
                         value={selectedDate}
                         onChange={onDateChange}
                         renderInput={(params) => <TextField {...params} helperText={null} />}
